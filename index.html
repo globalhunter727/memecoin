@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stupid Neiro — $NEIRO</title>
+  <meta name="description" content="Stupid Neiro — pure on-chain chaos. Buy, vibe, meme."/>
+  <meta property="og:title" content="Stupid Neiro — $NEIRO"/>
+  <meta property="og:description" content="No pitch deck. No promises. Just pure on-chain chaos."/>
+  <meta property="og:type" content="website"/>
+  <meta name="theme-color" content="#111111"/>
+  <meta property="og:image" content="https://yourdomain.com/og/neiro.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Preload -->
+  <link rel="preload" as="image" href="Images/neiro/logo.jpg">
+  <link rel="preload" as="audio" href="assets/sounds/sound1.wav">
+  <link rel="preload" as="audio" href="assets/sounds/sound2.mp3">
+  <link rel="preload" as="audio" href="assets/sounds/sound3.wav">
+
+  <style>
+    :root{ --accent-1:#7c3aed; --accent-2:#06b6d4; --accent-3:#f59e0b; }
+    html{scroll-behavior:smooth}
+    body{background:#000;overflow-x:hidden;-webkit-font-smoothing:antialiased;color:#fff}
+
+    .bg-grid{
+      background-image:
+        radial-gradient(50% 50% at 50% 50%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(60rem 60rem at 10% -10%, rgba(124,58,237,.22), transparent 60%),
+        radial-gradient(60rem 60rem at 110% 10%, rgba(6,182,212,.18), transparent 60%),
+        radial-gradient(70rem 70rem at 50% 120%, rgba(245,158,11,.12), transparent 60%);
+      background-blend-mode:screen,normal,normal,normal;
+    }
+    .noise:after{
+      content:""; position:fixed; inset:-2px; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
+      background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABlqYqNQAAAABJRU5ErkJggg==");
+      background-size:16px 16px; will-change:transform;
+    }
+
+    /* Buttons */
+    .btn{
+      position:relative; isolation:isolate; contain:paint; display:inline-flex; align-items:center; justify-content:center;
+      border-radius:1rem; font-weight:800; letter-spacing:.2px; padding:.9rem 1.25rem;
+      transition:transform .15s ease, box-shadow .2s ease, filter .2s ease;
+      background:linear-gradient(120deg,var(--accent-1),var(--accent-2),var(--accent-3));
+      background-size:200% 200%; animation:gradientShift 6s ease infinite;
+      border:1px solid rgba(255,255,255,.18); box-shadow:0 0 0 rgba(124,58,237,0); backface-visibility:hidden; transform:translateZ(0);
+      overflow:clip; color:#fff;
+    }
+    .btn:hover{transform:translateY(-1px) scale(1.02);box-shadow:0 12px 30px rgba(124,58,237,.25),0 6px 18px rgba(6,182,212,.18);filter:saturate(1.12)}
+    .btn:active{transform:translateY(0) scale(.99)}
+    .btn-shine:before{
+      content:""; position:absolute; inset:-55% -12%;
+      transform:rotate(20deg) translateZ(0);
+      background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.6) 50%,transparent 100%);
+      border-radius:inherit; pointer-events:none; will-change:transform; mix-blend-mode:screen;
+      transition:transform .55s ease, opacity .25s ease; opacity:0;
+    }
+    .btn-shine:hover:before{opacity:.75; transform:translateX(55%) rotate(20deg)}
+
+    .btn-emoji{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.22); color:#fff; }
+    .btn-emoji .emoji-bg{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; pointer-events:none;
+      filter:saturate(1) brightness(.92); opacity:.55; transform:scale(1.02);
+      transition:opacity .25s ease, transform .25s ease, filter .25s ease;
+      clip-path: inset(0 round 1rem);
+      -webkit-mask-image: radial-gradient(120% 120% at 50% 50%, #000 92%, transparent 100%);
+              mask-image: radial-gradient(120% 120% at 50% 50%, #000 92%, transparent 100%);
+    }
+    .btn-emoji .label{ position:relative; z-index:1 }
+    .btn-emoji:hover .emoji-bg{ opacity:.85; transform:scale(1.08); filter:saturate(1.18) brightness(1) }
+
+    .btn .ripple{ position:absolute; border-radius:999px; transform:translate(-50%,-50%); pointer-events:none; width:0; height:0; opacity:.5; background:radial-gradient(circle, rgba(255,255,255,.5) 0%, rgba(255,255,255,0) 60%); animation:ripple .6s ease-out forwards; mix-blend-mode:screen; }
+    @keyframes ripple{ to{width:220px;height:220px;opacity:0} }
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .card{ position:relative; border-radius:1.25rem; padding:1.25rem; overflow:clip; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); transition:box-shadow .25s ease, transform .2s ease; contain:paint; }
+    .card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(124,58,237,.18),0 4px 14px rgba(6,182,212,.12)}
+
+    .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease, transform .6s ease}
+    .reveal.is-visible{opacity:1;transform:translateY(0)}
+
+    #progress{ position:fixed;left:0;top:0;height:4px;z-index:9999; transform:translateZ(0); background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-3)); background-size:200% 200%;animation:gradientShift 10s ease infinite; will-change:width; }
+
+    .headlines{overflow:hidden;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+    .headlines .track{display:flex;gap:32px;white-space:nowrap;animation:headscroll 28s linear infinite;opacity:.9}
+    .headlines .pill{font-size:.95rem;color:#e5e7eb}
+    @keyframes headscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    .footer-wrap{border-top:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.4);contain:paint}
+    #contractBox{ cursor:pointer; }
+    #contractBox:focus{ outline:2px solid rgba(255,255,255,.25); outline-offset:2px; }
+
+    /* Tiny floating mute button */
+    .mute-fab{ position:fixed; right:12px; top:96px; z-index:9998; width:34px;height:34px; border-radius:9999px; display:grid;place-items:center; font-size:16px; line-height:1; color:#fff; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); backdrop-filter:blur(8px); opacity:.65; transition:opacity .2s ease, transform .2s ease, box-shadow .2s ease; }
+    .mute-fab:hover{opacity:1; transform:translateY(-1px); box-shadow:0 6px 18px rgba(124,58,237,.18);}
+    @media (max-width:768px){ .mute-fab{ top:auto; bottom:120px; } }
+
+    /* BRAND AVATAR (HEADER) – по-голям кръг, центрирано, с преливка при hover */
+    .brand-logo{
+      width:56px; height:56px; border-radius:9999px; padding:2px; display:grid; place-items:center;
+      background:linear-gradient(135deg,var(--accent-1),var(--accent-2),var(--accent-3));
+      background-size:200% 200%; background-position:0% 50%;
+      animation:gradientShift 10s ease infinite;
+      box-shadow:0 12px 30px rgba(124,58,237,.25), 0 6px 16px rgba(6,182,212,.14);
+      transition:transform .2s ease, box-shadow .2s ease, filter .2s ease, background-position .6s ease;
+    }
+    .brand-logo:hover{ transform:translateY(-1px) scale(1.04); box-shadow:0 18px 40px rgba(124,58,237,.35), 0 10px 24px rgba(6,182,212,.18); background-position:100% 50%; filter:saturate(1.08); }
+    .brand-avatar{
+      width:100%; height:100%; border-radius:9999px; object-fit:cover; object-position:center; display:block;
+      background: radial-gradient(80% 80% at 30% 30%, #0d1422, #070d14); /* тъмен фон вместо бяло */
+      -webkit-mask-image: radial-gradient(100% 100% at 50% 50%, #000 99%, transparent 100%);
+              mask-image: radial-gradient(100% 100% at 50% 50%, #000 99%, transparent 100%);
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"Stupid Neiro","url":"https://yourdomain.com","sameAs":["https://x.com/yourhandle","https://t.me/yourgroup"]}
+  </script>
+</head>
+<body class="bg-grid noise">
+  <div id="progress" style="width:0"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 backdrop-blur bg-black/30 border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="brand-logo">
+          <img src="Images/neiro/logo.jpg" alt="Stupid Neiro Logo" class="brand-avatar" loading="eager" decoding="async" fetchpriority="high">
+        </div>
+        <span class="font-semibold tracking-wide">Stupid Neiro</span>
+        <span id="chainBadge" class="text-[11px] text-white/60 border border-white/15 rounded-full px-2 py-0.5 ml-1.5">Solana • $NEIRO</span>
+        <span id="ticker" class="text-[11px] text-white/70 ml-2"></span>
+      </div>
+      <nav class="flex items-center gap-2">
+        <a href="#how" class="btn btn-shine btn-emoji text-sm"><img src="Images/neiro/neiro2.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label">How to Buy</span></a>
+        <a href="#tokenomics" class="btn btn-shine btn-emoji text-sm"><img src="Images/neiro/neiro3.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label">Tokenomics</span></a>
+        <a href="#news" class="btn btn-shine btn-emoji text-sm"><img src="Images/neiro/neiro4.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label">News</span></a>
+        <a href="#marketing" class="btn btn-shine btn-emoji text-sm"><img src="Images/neiro/neiro2.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label">Marketing</span></a>
+        <a href="#socials" class="btn btn-shine btn-emoji text-sm"><img src="Images/neiro/neiro3.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label">Socials</span></a>
+
+        <!-- BUY NOW с фон като останалите + нова картинка, която покрива целия бутон -->
+        <a href="https://dexscreener.com/" target="_blank" rel="noopener" class="btn btn-shine btn-emoji text-sm">
+          <img src="Images/neiro/neiro1.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async">
+          <span class="label">BUY NOW</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Anti-phishing top bar -->
+  <div id="phishBar" class="sticky top-[48px] z-40 bg-black/60 backdrop-blur border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-2 text-[12px] text-white/80 flex items-center gap-2">
+      <span>⚠️ Always verify the contract:</span>
+      <code id="contractShort" class="font-mono"></code>
+      <button id="copyContractTop" class="ml-2 btn btn-emoji btn-shine text-[11px] px-2 py-1">Copy</button>
+    </div>
+  </div>
+
+  <!-- Tiny mute button -->
+  <button id="muteFab" class="mute-fab" type="button" title="Sound: On" aria-pressed="false">🔊</button>
+
+  <!-- Headlines -->
+  <div class="headlines py-2"><div id="headlineTrack" class="track px-4"></div></div>
+
+  <!-- Hero -->
+  <main class="relative z-10">
+    <section class="hero-wrap max-w-6xl mx-auto px-4 pt-10 pb-10 text-center">
+      <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] reveal">
+        The Meme That <span class="bg-clip-text text-transparent" style="background-image:linear-gradient(120deg,#fff,#c084fc,#22d3ee);background-size:200% 200%;animation:gradientShift 6s ease infinite;">Refuses To Think</span>
+      </h1>
+      <p class="mt-5 text-lg md:text-xl text-white/80 max-w-3xl mx-auto reveal">
+        Stupid Neiro ($NEIRO). No pitch deck. No promises. Just on-chain chaos. If you know, you know.
+      </p>
+
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto reveal">
+        <a href="https://dexscreener.com/" target="_blank" rel="noopener" class="btn btn-shine btn-emoji w-full"><img src="Images/neiro/neiro2.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label">Buy on DEX</span></a>
+        <button id="watchBtn" class="btn btn-shine btn-emoji w-full" type="button"><img src="Images/neiro/neiro3.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label" id="watchLabel">Add to Phantom</span></button>
+        <button id="copyBtn" class="btn btn-shine btn-emoji w-full" type="button"><img src="Images/neiro/neiro4.jpg" alt="" class="emoji-bg" loading="lazy" decoding="async"><span class="label">Copy Contract</span></button>
+      </div>
+
+      <!-- Contract box -->
+      <div class="mt-6 max-w-3xl mx-auto card reveal text-left soundable" id="contractBox" role="button" tabindex="0">
+        <p class="text-xs text-white/60 mb-2 flex items-center justify-between">
+          <span id="contractLabel">Contract Address (Solana mint)</span>
+          <span id="copyHint" class="text-[11px] text-white/50">Click to copy</span>
+        </p>
+        <code id="contract" class="text-sm break-all font-mono select-text">So11111111111111111111111111111111111111112</code>
+      </div>
+    </section>
+
+    <!-- How to Buy -->
+    <section id="how" class="max-w-6xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 reveal">How to Buy</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="card reveal soundable"><div class="flex items-center gap-3"><div class="h-9 w-9 rounded-xl bg-white/10 grid place-items-center">1</div><h3 class="font-semibold">Get a Wallet</h3></div><p class="mt-2 text-sm text-white/80">Install Phantom (or any Solana wallet). Fund with SOL for fees.</p></div>
+        <div class="card reveal soundable"><div class="flex items-center gap-3"><div class="h-9 w-9 rounded-xl bg-white/10 grid place-items-center">2</div><h3 class="font-semibold">Open the DEX</h3></div><p class="mt-2 text-sm text-white/80">Use BUY for the exact pair. Double-check the mint.</p></div>
+        <div class="card reveal soundable"><div class="flex items-center gap-3"><div class="h-9 w-9 rounded-xl bg-white/10 grid place-items-center">3</div><h3 class="font-semibold">Swap & HODL</h3></div><p class="mt-2 text-sm text-white/80">Paste the mint, set slippage if needed, confirm. Welcome aboard.</p></div>
+      </div>
+    </section>
+
+    <!-- Tokenomics -->
+    <section id="tokenomics" class="max-w-6xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 reveal">Tokenomics</h2>
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="card reveal soundable"><p class="text-sm text-white/60">Supply</p><p class="mt-1 text-xl font-semibold">1,000,000,000</p></div>
+        <div class="card reveal soundable"><p class="text-sm text-white/60">Taxes</p><p class="mt-1 text-xl font-semibold">0% / 0%</p></div>
+        <div class="card reveal soundable"><p class="text-sm text-white/60">Liquidity</p><p class="mt-1 text-xl font-semibold">Burned / Locked</p></div>
+        <div class="card reveal soundable"><p class="text-sm text-white/60">Team</p><p class="mt-1 text-xl font-semibold">0% — fair launch</p></div>
+      </div>
+    </section>
+
+    <!-- Latest News -->
+    <section id="news" class="max-w-6xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 reveal">Latest News</h2>
+      <div id="newsGrid" class="grid md:grid-cols-3 gap-4"></div>
+      <div class="text-center mt-6">
+        <button id="loadMoreNews" class="btn btn-shine btn-emoji text-sm" type="button"><img src="Images/neiro/neiro4.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">Load more</span></button>
+      </div>
+    </section>
+
+    <!-- Marketing Hub -->
+    <section id="marketing" class="max-w-6xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 reveal">Marketing Hub</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="card reveal">
+          <h3 class="font-semibold">Share to X</h3>
+          <p class="mt-2 text-sm text-white/80">Help us trend. Your post includes UTM link.</p>
+          <textarea id="tweetText" class="mt-3 w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm resize-none" rows="4">Stupid Neiro ($NEIRO) — pure on-chain chaos. No promises, only vibes.
+Buy here 👉 </textarea>
+          <div class="flex gap-2 mt-3">
+            <button id="openTweet" class="btn btn-shine text-sm" type="button">Post on X</button>
+            <button id="copyShare" class="btn btn-emoji btn-shine text-sm relative" type="button"><img src="Images/neiro/neiro3.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">Copy link</span></button>
+          </div>
+          <p id="shareHint" class="text-[11px] text-white/60 mt-2">Tip: add a gif or sticker for more reach.</p>
+        </div>
+
+        <div class="card reveal soundable">
+          <h3 class="font-semibold">Giveaway / Quests</h3>
+          <ul id="questList" class="mt-3 space-y-2 text-sm">
+            <li class="flex items-center gap-2"><input type="checkbox" class="quest" data-id="followx"> Follow us on X</li>
+            <li class="flex items-center gap-2"><input type="checkbox" class="quest" data-id="joinTG"> Join Telegram</li>
+            <li class="flex items-center gap-2"><input type="checkbox" class="quest" data-id="retweet"> Retweet the pinned post</li>
+          </ul>
+          <div class="mt-3 text-sm">Progress: <span id="questProgress">0/3</span></div>
+          <div class="mt-3"><button id="claimBtn" class="btn btn-shine btn-emoji text-sm" type="button"><img src="Images/neiro/neiro2.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">Claim entry</span></button></div>
+          <p class="text-[11px] text-white/60 mt-2">Front-end only. Final winners announced on-chain.</p>
+        </div>
+
+        <div class="card reveal soundable">
+          <h3 class="font-semibold">Press Kit</h3>
+          <p class="mt-2 text-sm text-white/80">Logos, banners, brand colors and usage.</p>
+          <div class="mt-3 flex gap-2">
+            <a href="#" class="btn btn-shine text-sm">Download ZIP</a>
+            <a href="#tokenomics" class="btn btn-emoji btn-shine text-sm relative"><img src="Images/neiro/neiro4.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">View brand</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Transparency (Solana) -->
+    <section class="max-w-6xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 reveal">Transparency (Solana)</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="card reveal soundable">
+          <p class="text-sm text-white/60">Treasury</p>
+          <code class="text-sm break-all" id="addrTreasury">So11111111111111111111111111111111111111112</code>
+          <div class="mt-3 flex gap-2">
+            <button class="btn btn-shine text-sm copy" data-target="addrTreasury" type="button">Copy</button>
+            <a target="_blank" rel="noopener" href="https://solscan.io/account/So11111111111111111111111111111111111111112" class="btn btn-emoji btn-shine text-sm relative"><img src="Images/neiro/neiro2.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">View on Solscan</span></a>
+          </div>
+        </div>
+        <div class="card reveal soundable">
+          <p class="text-sm text-white/60">Marketing</p>
+          <code class="text-sm break-all" id="addrMarketing">So22222222222222222222222222222222222222222</code>
+          <div class="mt-3 flex gap-2">
+            <button class="btn btn-shine text-sm copy" data-target="addrMarketing" type="button">Copy</button>
+            <a target="_blank" rel="noopener" href="https://solscan.io/account/So22222222222222222222222222222222222222222" class="btn btn-emoji btn-shine text-sm relative"><img src="Images/neiro/neiro3.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">View on Solscan</span></a>
+          </div>
+        </div>
+        <div class="card reveal soundable">
+          <p class="text-sm text-white/60">Community Pool</p>
+          <code class="text-sm break-all" id="addrCommunity">So33333333333333333333333333333333333333333</code>
+          <div class="mt-3 flex gap-2">
+            <button class="btn btn-shine text-sm copy" data-target="addrCommunity" type="button">Copy</button>
+            <a target="_blank" rel="noopener" href="https://solscan.io/account/So33333333333333333333333333333333333333333" class="btn btn-emoji btn-shine text-sm relative"><img src="Images/neiro/neiro4.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">View on Solscan</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ / Socials -->
+    <section id="socials" class="max-w-6xl mx-auto px-4 pb-24">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 reveal">FAQ</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card reveal soundable"><h3 class="font-semibold">Is this financial advice?</h3><p class="mt-2 text-sm text-white/80">No. It's a meme. DYOR.</p></div>
+        <div class="card reveal soundable"><h3 class="font-semibold">Where can I see the chart?</h3><p class="mt-2 text-sm text-white/80">Open Dexscreener via the BUY button or search the mint directly.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <section class="footer-wrap">
+    <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-centered gap-3 w-full md:w-auto">
+        <a href="https://x.com/" target="_blank" rel="noopener" class="btn btn-shine btn-emoji text-sm"><img src="Images/neiro/neiro2.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">Follow on X</span></a>
+        <a href="https://t.me/" target="_blank" rel="noopener" class="btn btn-shine btn-emoji text-sm"><img src="Images/neiro/neiro3.jpg" class="emoji-bg" alt="" loading="lazy" decoding="async"><span class="label">Join Telegram</span></a>
+      </div>
+      <span class="text-xs text-white/60">© <span id="year"></span> Stupid Neiro — this is a meme. No promises.</span>
+    </div>
+  </section>
+
+  <!-- Sticky Mobile Action Bar -->
+  <div id="actionBar" class="fixed bottom-0 inset-x-0 z-[9998] md:hidden">
+    <div class="mx-auto max-w-6xl px-3 pb-3">
+      <div class="rounded-2xl bg-white/10 backdrop-blur border border-white/15 shadow-lg flex items-center justify-between px-3 py-2">
+        <button id="abBuy" class="btn btn-shine text-xs px-3 py-2">Buy</button>
+        <button id="abChart" class="btn btn-emoji btn-shine text-xs px-3 py-2 relative"><span class="label">Chart</span></button>
+        <a id="abTG" href="https://t.me/" target="_blank" rel="noopener" class="btn btn-emoji btn-shine text-xs px-3 py-2"><span class="label">Telegram</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to top & canvas -->
+  <button id="toTop" class="hidden fixed right-4 bottom-20 z-[9999] btn btn-shine text-xs px-4 py-3 contain-paint" type="button">Back to Top</button>
+  <canvas id="confetti" class="fixed inset-0 pointer-events-none z-[100]"></canvas>
+
+  <!-- Audio elements -->
+  <audio id="hover-sound" preload="auto"><source src="assets/sounds/sound1.wav" type="audio/wav"></audio>
+  <audio id="click-sound" preload="auto"><source src="assets/sounds/sound2.mp3" type="audio/mpeg"></audio>
+  <audio id="static-sound" preload="auto"><source src="assets/sounds/sound3.wav" type="audio/wav"></audio>
+
+  <!-- News data -->
+  <script id="news-data" type="application/json">
+  {"items":[
+    {"title":"LP tokens burned — liquidity immutable","date":"2025-02-20","tag":"Liquidity","href":"https://solscan.io/tx/XXXXXXXX","emoji":"🔥"},
+    {"title":"Community quests live — win airdrop spots","date":"2025-02-19","tag":"Quests","href":"https://x.com/","emoji":"🎯"},
+    {"title":"Marketing wallet funded for CEX apps","date":"2025-02-18","tag":"Funding","href":"https://solscan.io/account/So22222222222222222222222222222222222222222","emoji":"💰"},
+    {"title":"Website v2 — emoji buttons + sounds","date":"2025-02-17","tag":"Update","href":"#","emoji":"✨"}]}
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* Reveal on scroll */
+    const io = new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('is-visible'); }),{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    /* Sounds + Mute */
+    const sndHover = document.getElementById('hover-sound') || new Audio('assets/sounds/sound1.wav');
+    const sndClick = document.getElementById('click-sound') || new Audio('assets/sounds/sound2.mp3');
+    const sndStatic = document.getElementById('static-sound') || new Audio('assets/sounds/sound3.wav');
+    sndHover.volume=.5; sndClick.volume=.65; sndStatic.volume=.45;
+    let soundOn = true;
+    function safePlay(a){ if(!soundOn) return; try{ const x=a.cloneNode(true); x.volume=a.volume; document.body.appendChild(x); x.play().catch(()=>{}); setTimeout(()=>x.remove(),2000);}catch(e){} }
+    const muteFab = document.getElementById('muteFab');
+    muteFab.addEventListener('click', ()=>{ soundOn=!soundOn; muteFab.textContent = soundOn ? '🔊' : '🔇'; muteFab.title = soundOn ? 'Sound: On' : 'Sound: Off'; muteFab.setAttribute('aria-pressed', String(!soundOn)); });
+
+    let primed=false;
+    function primeAudio(){ if(primed) return; primed=true;
+      try{ const Ctx=window.AudioContext||window.webkitAudioContext; if(Ctx){ const c=new Ctx(); if(c.state==='suspended') c.resume(); } }catch(e){}
+      [sndHover,sndClick,sndStatic].forEach(a=>{ try{ const v=a.volume; a.volume=0; Promise.resolve(a.play()).then(()=>{ a.pause(); a.currentTime=0; a.volume=v; }).catch(()=>a.volume=v); }catch(e){} });
+      ['pointerdown','touchstart','keydown','wheel','mousemove'].forEach(ev=>window.removeEventListener(ev,primeAudio));
+    }
+    ['pointerdown','touchstart','keydown','wheel','mousemove'].forEach(ev=>window.addEventListener(ev,primeAudio,{passive:true}));
+
+    function ripple(e, el){ const r = el.getBoundingClientRect(); const span = document.createElement('span'); span.className='ripple'; span.style.left = (e.clientX - r.left) + 'px'; span.style.top  = (e.clientY - r.top) + 'px'; el.appendChild(span); span.addEventListener('animationend', ()=> span.remove(), {once:true}); }
+    document.querySelectorAll('.btn, a.btn, button.btn').forEach(el=>{ el.addEventListener('mouseenter', ()=> safePlay(sndHover), {passive:true}); el.addEventListener('click', (e)=>{ ripple(e, el); safePlay(sndClick); }); });
+    document.querySelectorAll('.soundable').forEach(el=>{ el.addEventListener('mouseenter', ()=> safePlay(sndStatic), {passive:true}); });
+
+    /* Headlines + News rendering */
+    const newsJSON = JSON.parse(document.getElementById('news-data').textContent);
+    const track = document.getElementById('headlineTrack');
+    function renderHeadlines(items){
+      const half=[...items,...items]; track.innerHTML='';
+      half.forEach(n=>{
+        const pill=document.createElement('span'); pill.className='pill';
+        pill.innerHTML = `${n.emoji||'📰'} <span class="opacity-80">${n.tag}</span> — ${n.title}`;
+        track.appendChild(pill);
+      });
+    }
+    const newsGrid = document.getElementById('newsGrid'); let newsIndex = 0;
+    function renderNewsChunk(count=3){
+      const data=newsJSON.items.slice(newsIndex, newsIndex+count);
+      data.forEach(n=>{
+        const a=document.createElement('a');
+        a.href=n.href||'#';
+        a.target = n.href && n.href.startsWith('http') ? '_blank' : '_self';
+        a.rel="noopener";
+        a.className='card hover:translate-y-[-2px] transition block news-card';
+        a.innerHTML=`<div class="text-xs text-white/60">${n.emoji||'📰'} ${n.tag} • ${new Date(n.date).toLocaleDateString()}</div>
+                     <div class="mt-2 text-base font-semibold">${n.title}</div>`;
+        a.addEventListener('mouseenter', ()=> safePlay(sndHover), {passive:true});
+        a.addEventListener('click', ()=> safePlay(sndClick));
+        newsGrid.appendChild(a);
+      });
+      newsIndex+=data.length;
+      if(newsIndex>=newsJSON.items.length){ document.getElementById('loadMoreNews').classList.add('hidden'); }
+    }
+    renderHeadlines(newsJSON.items); renderNewsChunk();
+    document.getElementById('loadMoreNews').addEventListener('click', ()=>renderNewsChunk());
+
+    /* Share to X */
+    const DEX_URL='https://dexscreener.com/';
+    function buildUTM(u){ const p=new URL(u, location.href); p.searchParams.set('utm_source','community'); p.searchParams.set('utm_medium','x'); p.searchParams.set('utm_campaign','neiro_growth'); return p.toString(); }
+    const tweetText=document.getElementById('tweetText'); if(tweetText) tweetText.value = tweetText.value + buildUTM(DEX_URL);
+    document.getElementById('openTweet')?.addEventListener('click', ()=>{
+      const txt=encodeURIComponent(tweetText.value);
+      window.open(`https://twitter.com/intent/tweet?text=${txt}`,'_blank','noopener');
+    });
+    document.getElementById('copyShare')?.addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(tweetText.value); document.getElementById('shareHint').textContent='Copied!'; setTimeout(()=>document.getElementById('shareHint').textContent='Tip: add a gif or sticker for more reach.',1200);}catch(e){}
+    });
+
+    /* Giveaway local progress */
+    const qs=document.querySelectorAll('.quest'); const qProg=document.getElementById('questProgress');
+    function syncQ(){ const done=[...qs].filter(q=>q.checked).length; qProg.textContent=`${done}/${qs.length}`; localStorage.setItem('neiroQuests', JSON.stringify([...qs].map(q=>q.checked))); }
+    const saved=JSON.parse(localStorage.getItem('neiroQuests')||'[]'); qs.forEach((q,i)=>{ if(saved[i]) q.checked=true; q.addEventListener('change', syncQ); }); syncQ();
+    document.getElementById('claimBtn')?.addEventListener('click', ()=> alert('Entry recorded locally. Final winners announced via on-chain post.'));
+
+    /* Contract / Solana helpers */
+    const contractEl=document.getElementById('contract'), contractBox=document.getElementById('contractBox'), copyHint=document.getElementById('copyHint'), contractLabel=document.getElementById('contractLabel'), chainBadge=document.getElementById('chainBadge'), watchBtn=document.getElementById('watchBtn'), watchLabel=document.getElementById('watchLabel');
+    const normalize=t=>t.replace(/\s+/g,'').trim(); const isSol=a=>/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(a);
+    function setContract(addr){ const clean=normalize(addr); const ok=isSol(clean); contractEl.textContent = ok?clean:'⚠️ INVALID ADDRESS'; copyHint.textContent = ok?'Click to copy':'Invalid address'; chainBadge.textContent='Solana • $NEIRO'; contractLabel.textContent='Contract Address (Solana mint)'; watchLabel.textContent='Add to Phantom'; return ok; }
+    setContract(contractEl.textContent);
+    async function copyContract(){ const txt=contractEl.textContent.trim(); if(txt.startsWith('⚠️')) return; try{ await navigator.clipboard.writeText(txt); copyHint.textContent='Copied!'; runConfetti(); setTimeout(()=>copyHint.textContent='Click to copy',1200);}catch(e){ copyHint.textContent='Copy failed'; setTimeout(()=>copyHint.textContent='Click to copy',1200); } }
+    contractBox.addEventListener('click', copyContract);
+    contractBox.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); copyContract(); }});
+    document.getElementById('copyBtn').addEventListener('click', copyContract);
+
+    // Anti-phishing short address
+    (function(){
+      const c=contractEl.textContent.trim();
+      const short=c.length>12?`${c.slice(0,6)}…${c.slice(-6)}`:c;
+      const out=document.getElementById('contractShort');
+      if(out) out.textContent=short;
+      document.getElementById('copyContractTop')?.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(c);}catch(e){} });
+    })();
+
+    // Transparency copy buttons
+    document.querySelectorAll('.copy').forEach(b=>{
+      b.addEventListener('click', async ()=>{
+        const id=b.dataset.target; const t=document.getElementById(id)?.textContent.trim();
+        if(!t) return; try{ await navigator.clipboard.writeText(t); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy',1000);}catch(e){}
+      });
+    });
+
+    // Add to Wallet (Phantom hint)
+    watchBtn.addEventListener('click', async ()=>{
+      const address=contractEl.textContent.trim();
+      if(!isSol(address)){ alert('Invalid mint address'); return; }
+      if(window.solana && window.solana.isPhantom){
+        try{ await window.solana.connect({onlyIfTrusted:false}); alert('Open Phantom → Add custom token with the mint above.'); }catch(e){}
+      } else {
+        window.open(`https://phantom.app/ul/browse/${encodeURIComponent(location.href)}?ref=neiro`, '_blank','noopener');
+      }
+    });
+
+    /* Confetti */
+    function runConfetti(){
+      const canvas=document.getElementById('confetti'); if(!canvas) return;
+      const ctx=canvas.getContext('2d');
+      const W=canvas.width=innerWidth, H=canvas.height=innerHeight;
+      const colors=['#a78bfa','#22d3ee','#fbbf24','#fff'];
+      const pieces=Array.from({length:120},()=>({x:Math.random()*W,y:-20-Math.random()*H*.5,r:2+Math.random()*3,s:1+Math.random()*2.5,a:Math.random()*Math.PI}));
+      let t=0,id;(function draw(){
+        ctx.clearRect(0,0,W,H);
+        pieces.forEach(p=>{
+          p.y+=p.s; p.x+=Math.sin((t+p.a))*.8;
+          ctx.fillStyle=colors[(Math.floor(p.y/20)+Math.floor(p.x/50))%colors.length];
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+        });
+        t+=.05; if(t<90) id=requestAnimationFrame(draw); else cancelAnimationFrame(id);
+      })();
+    }
+
+    /* Reduced motion + Smooth scroll */
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) {(function SmoothScroll(){ const isTouch='ontouchstart' in window||navigator.maxTouchPoints>0; let target=window.scrollY,current=window.scrollY; const ease=.12; let raf=null; const clamp=(v,min,max)=>Math.max(min,Math.min(v,max)); const maxScroll=()=>document.documentElement.scrollHeight - window.innerHeight; function start(){ if(!raf) raf=requestAnimationFrame(tick);} function tick(){ current+=(target-current)*ease; if(Math.abs(target-current)<.2){ current=target; raf=null; return;} window.scrollTo(0,current); raf=requestAnimationFrame(tick);} function onWheel(e){ if(e.ctrlKey||isTouch) return; e.preventDefault(); target=clamp(target+e.deltaY,0,maxScroll()); start(); } function onKey(e){ const h=window.innerHeight*.9; let d=0; switch(e.key){ case'ArrowDown':d=60;break; case'ArrowUp':d=-60;break; case'PageDown': case' ': d=h;break; case'PageUp': d=-h;break; case'Home': target=0; start(); e.preventDefault(); return; case'End': target=maxScroll(); start(); e.preventDefault(); return; default:return;} e.preventDefault(); target=clamp(target+d,0,maxScroll()); start(); } function onResize(){ target=current=window.scrollY;} document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click',e=>{ const id=a.getAttribute('href').slice(1); if(!id) return; const el=document.getElementById(id); if(!el) return; e.preventDefault(); const off=72, y=el.getBoundingClientRect().top + window.scrollY - off; target=clamp(y,0,maxScroll()); start();});}); window.addEventListener('wheel',onWheel,{passive:false}); window.addEventListener('keydown',onKey,{passive:false}); window.addEventListener('resize',onResize,{passive:true}); })(); } else { document.documentElement.style.scrollBehavior='auto'; }
+
+    /* Progress + Back-to-top */
+    const progress=document.getElementById('progress'), toTop=document.getElementById('toTop');
+    function onScroll(){ const h=document.documentElement; const scrolled = (h.scrollTop)/(h.scrollHeight - h.clientHeight); progress.style.width=(scrolled*100)+'%'; if(h.scrollTop>400) toTop.classList.remove('hidden'); else toTop.classList.add('hidden'); }
+    document.addEventListener('scroll', onScroll, {passive:true}); onScroll(); toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+    /* Sticky mobile action bar */
+    const BUY_URL='https://dexscreener.com/';
+    document.getElementById('abBuy').addEventListener('click', ()=> window.open(BUY_URL,'_blank','noopener'));
+    document.getElementById('abChart').addEventListener('click', ()=> window.open(BUY_URL,'_blank','noopener'));
+
+    /* Referral UTM */
+    function uid(){ return Math.random().toString(36).slice(2,8); }
+    function addParams(u,obj){ const url=new URL(u, location.origin); Object.entries(obj).forEach(([k,v])=> url.searchParams.set(k,v)); return url.toString(); }
+    (function setupRef(){
+      const params=new URLSearchParams(location.search);
+      const incoming=params.get('r'); if(incoming) localStorage.setItem('referrer', incoming);
+      const myRef=localStorage.getItem('my_ref')||(()=>{ const x=uid(); localStorage.setItem('my_ref',x); return x; })();
+      const links=document.querySelectorAll('a[href*="dexscreener.com"]');
+      links.forEach(a=>{ a.href = addParams(a.href||BUY_URL, {utm_source:'site',utm_medium:'cta',utm_campaign:'neiro', r:myRef}); });
+      if (tweetText && !tweetText.value.includes('utm_campaign')) {
+        tweetText.value = tweetText.value + addParams(BUY_URL,{utm_source:'community',utm_medium:'x',utm_campaign:'neiro_growth', r:myRef});
+      }
+    })();
+
+    /* Live ticker from Dexscreener */
+    async function loadTicker(tokenAddress){
+      try{
+        const r=await fetch(`https://api.dexscreener.com/latest/dex/tokens/${encodeURIComponent(tokenAddress)}`);
+        const j=await r.json();
+        const p=j?.pairs?.[0]; if(!p) return;
+        const price=p.priceUsd?Number(p.priceUsd).toFixed(6):'—';
+        const fdv=p.fdv?Intl.NumberFormat('en',{notation:'compact'}).format(p.fdv):'—';
+        const vol24=p.volume?.h24?Intl.NumberFormat('en',{notation:'compact'}).format(p.volume.h24):'—';
+        document.getElementById('ticker').textContent=`$${price} • FDV ${fdv} • 24h ${vol24}`;
+      }catch(e){}
+    }
+    const tokenAddr=document.getElementById('contract').textContent.trim();
+    if(/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(tokenAddr)){ loadTicker(tokenAddr); setInterval(()=>loadTicker(tokenAddr), 30000); }
+
+    /* Solana balances for transparency wallets */
+    const SOLANA_RPC='https://api.mainnet-beta.solana.com';
+    const solCards=[{id:'addrTreasury'},{id:'addrMarketing'},{id:'addrCommunity'}];
+    async function solGetBalance(address){
+      const r=await fetch(SOLANA_RPC,{method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({jsonrpc:'2.0', id:1, method:'getBalance', params:[address]})});
+      const j=await r.json(); return (j?.result?.value ?? 0)/1e9;
+    }
+    async function mountBalances(){
+      for(const c of solCards){
+        const el=document.getElementById(c.id); if(!el) continue;
+        const addr=el.textContent.trim(); if(!addr||addr.startsWith('⚠')) continue;
+        try{
+          const sol=await solGetBalance(addr);
+          const old=el.parentElement.querySelector('.sol-balance-pill'); if(old) old.remove();
+          const pill=document.createElement('div');
+          pill.className='mt-2 text-xs text-white/70 sol-balance-pill';
+          pill.textContent=`Balance: ${sol.toFixed(3)} SOL`;
+          el.parentElement.appendChild(pill);
+        }catch(e){}
+      }
+    }
+    mountBalances(); setInterval(mountBalances, 60000);
+  </script>
+</body>
+</html>
+
+
